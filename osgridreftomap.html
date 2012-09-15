@@ -5,7 +5,8 @@
 <meta charset="utf-8"/>
 <style type="text/css">
 form  { max-width: 300px; }
-input { width: 200px; font-size: 20px;}
+input { font-size: 20px;}
+input.keybutton { width: 60px; }
 </style>
 <script src="latlon.js">/* Latitude/Longitude formulae JavaScript implementation */</script>
 <script src="geo.js">/*  */</script>
@@ -14,14 +15,47 @@ input { width: 200px; font-size: 20px;}
 <script src="jquery.min.js"></script>
 <script>
 $(document).ready(function() {
-  $('#easting,#northing').change( function() {
-    var gridref = new OsGridRef($('#easting').val(), $('#northing').val());
-    var pOSGB = OsGridRef.osGridToLatLong(gridref); 
-    pWGS = CoordTransform.convertOSGB36toWGS84(pOSGB);
-    WGS84LatLon = pWGS.lat().toFixed(8) + ',' + pWGS.lon().toFixed(8);
-    $('#WGS84').html(WGS84LatLon);
+  $('#osgridref').change( function() {
+    recalc();
+  });
+  $('#osgridref').focus();
+  $('#osgridref').keypress(function(ev) {
+    if(ev.which == 13) {
+      ev.preventDefault();
+      $('#showmap').focus();
+    }
   });
 });
+function recalc() {
+  var gr = $('#osgridref').val().split(" ");
+  var gridref;
+  if(gr.length == 2 && gr[0].length == 6 && gr[1].length == 6)
+    gridref = new OsGridRef(gr[0], gr[1]);
+  else if(gr.length == 1 && gr[0].length == 12)
+    gridref = new OsGridRef(gr[0].substring(0, 6), gr[0].substring(6, 12));
+  else {
+    $('#WGS84').html("");
+    $('#showmap').attr('disabled', true);
+    /*console.log("invalid osgridref");*/
+    return;
+  }
+  /*console.log("gridref", gridref);*/
+  pOSGB = OsGridRef.osGridToLatLong(gridref);
+  pWGS = CoordTransform.convertOSGB36toWGS84(pOSGB);
+  WGS84LatLon = pWGS.lat().toFixed(8) + ',' + pWGS.lon().toFixed(8);
+  $('#WGS84').html(WGS84LatLon);
+  $('#showmap').attr('disabled', false);
+}
+function insert(n) {
+  var field = $('#osgridref');
+  field.val(field.val() + n);
+  recalc();
+}
+function del() {
+  var field = $('#osgridref');
+  field.val(field.val().substring(0, field.val().length - 1));
+  recalc();
+}
 function showMap() {
   window.open('http://maps.google.co.uk/?q=loc:' + WGS84LatLon + '&amp;ll=' + WGS84LatLon);
 }
@@ -35,12 +69,38 @@ function navigateTo() {
 <fieldset><legend>Convert OS Grid Ref to WGS84 Lat/Lon</legend>
 <table>
 <tr>
-<td><b>Easting</b></td>
-<td><input name="easting" id="easting"></td>
+<td colspan="2">Input 12 digit grid ref or 2 x 6 digits</td>
 </tr>
+<!--
 <tr>
-<td><b>Northing</b></td>
-<td><input name="northing" id="northing"></td>
+<td>&nbsp;</td>
+ <td><table>
+   <tr>
+   <td><input type="button" class="keybutton" value="1" onclick="insert(1)"/></td>
+   <td><input type="button" class="keybutton" value="2" onclick="insert(2)"/></td>
+   <td><input type="button" class="keybutton" value="3" onclick="insert(3)"/></td>
+   </tr>
+   <tr>
+   <td><input type="button" class="keybutton" value="4" onclick="insert(4)"/></td>
+   <td><input type="button" class="keybutton" value="5" onclick="insert(5)"/></td>
+   <td><input type="button" class="keybutton" value="6" onclick="insert(6)"/></td>
+   </tr>
+   <tr>
+   <td><input type="button" class="keybutton" value="7" onclick="insert(7)"/></td>
+   <td><input type="button" class="keybutton" value="8" onclick="insert(8)"/></td>
+   <td><input type="button" class="keybutton" value="9" onclick="insert(9)"/></td>
+   </tr>
+   <tr>
+   <td><input type="button" class="keybutton" value="0" onclick="insert(0)"/></td>
+   <td><input type="button" class="keybutton" value="SP" onclick="insert(' ')"/></td>
+   <td><input type="button" class="keybutton" value="DEL" onclick="del()"/></td>
+   </tr>
+ </table>
+ </td>
+</tr>
+-->
+<tr>
+<td colspan="2"><input name="osgridref" id="osgridref" onkeyup="recalc()"></td>
 </tr>
 <tr>
 <td>&nbsp;</td>
@@ -56,7 +116,7 @@ function navigateTo() {
 </tr>
 <tr>
 <td>&nbsp;</td>
-<td><input type="button" id="showmap" value="Show Map" onclick="showMap()"/></td>
+<td><input type="button" id="showmap" value="Show Map" onclick="showMap()" disabled="true"/></td>
 </tr>
 <!--
 <tr>
