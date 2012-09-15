@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Convert from OS National Grid Reference points to WGS84</title>
+<meta charset="utf-8"/>
+<style type="text/css">
+form  { max-width: 300px; }
+input { width: 200px; font-size: 20px;}
+</style>
+<script src="latlon.js">/* Latitude/Longitude formulae JavaScript implementation */</script>
+<script src="geo.js">/*  */</script>
+<script src="coordtransform.js">/*  */</script>
+<script src="osgridref.js">/*  */</script>
+<script src="jquery.min.js"></script>
+<script>
+$(document).ready(function() {
+  $('#easting,#northing').change( function() {
+    var gridref = new OsGridRef($('#easting').val(), $('#northing').val());
+    var pOSGB = OsGridRef.osGridToLatLong(gridref); 
+    pWGS = CoordTransform.convertOSGB36toWGS84(pOSGB);
+    WGS84LatLon = pWGS.lat().toFixed(8) + ',' + pWGS.lon().toFixed(8);
+    $('#WGS84').html(WGS84LatLon);
+  });
+});
+function showMap() {
+  window.open('http://maps.google.co.uk/?q=loc:' + WGS84LatLon + '&amp;ll=' + WGS84LatLon);
+}
+function navigateTo() {
+  document.location='geo:' + WGS84LatLon;
+}
+</script>
+</head>
+<body>
+<form>
+<fieldset><legend>Convert OS Grid Ref to WGS84 Lat/Lon</legend>
+<table>
+<tr>
+<td><b>Easting</b></td>
+<td><input name="easting" id="easting"></td>
+</tr>
+<tr>
+<td><b>Northing</b></td>
+<td><input name="northing" id="northing"></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td><b>WGS84</b></td> 
+<td><output id="WGS84"></output></td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td><input type="button" id="showmap" value="Show Map" onclick="showMap()"/></td>
+</tr>
+<!--
+<tr>
+<td colspan="2"><input type="button" id="navigateto" value="Navigate To" onclick="navigateTo()"/></td>
+</tr>
+-->
+</table>
+</fieldset>
+</form>
+<div style="max-width: 300px;">
+<p>This utility is provided without any warranty of correctness or fitness for purpose. Use at your own risk.</p>
+<p>Please send any feedback to <a href='mailto:burtoogle@gmail.com'>Mark Burton</a>.
+<p>Many thanks to Chris Veness for writing the Javascript that does all the hard work (see <a href="http://www.movable-type.co.uk/scripts/latlong-gridref.html">Convert between Latitude/Longitude &amp; OS National Grid Reference points</a>).</p>
+</div>
+</body>
+</html>
+
