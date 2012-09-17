@@ -15,11 +15,12 @@ input.keybutton { width: 60px; }
 <script src="jquery.min.js"></script>
 <script>
 $(document).ready(function() {
-  $('#osgridref').change( function() {
+  var gridrefin = $('#osgridref');
+  gridrefin.change( function() {
     recalc();
   });
-  $('#osgridref').focus();
-  $('#osgridref').keypress(function(ev) {
+  gridrefin.focus();
+  gridrefin.keypress(function(ev) {
     if(ev.which == 13) {
       ev.preventDefault();
       $('#showmap').focus();
