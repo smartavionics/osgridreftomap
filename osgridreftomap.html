@@ -57,7 +57,7 @@ function del() {
   recalc();
 }
 function showMap() {
-  window.open('http://maps.google.co.uk/?q=loc:' + WGS84LatLon + '&amp;ll=' + WGS84LatLon);
+  window.open('http://maps.google.co.uk/?q=loc:' + WGS84LatLon + '&ll=' + WGS84LatLon + '&t=m');
 }
 function navigateTo() {
   document.location='geo:' + WGS84LatLon;
