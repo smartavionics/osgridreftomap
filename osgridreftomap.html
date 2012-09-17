@@ -29,32 +29,31 @@ $(document).ready(function() {
 });
 function recalc() {
   var gr = $('#osgridref').val().split(" ");
-  var gridref;
+  var osgridref;
   if(gr.length == 2 && gr[0].length == 6 && gr[1].length == 6)
-    gridref = new OsGridRef(gr[0], gr[1]);
+    osgridref = new OsGridRef(gr[0], gr[1]);
   else if(gr.length == 1 && gr[0].length == 12)
-    gridref = new OsGridRef(gr[0].substring(0, 6), gr[0].substring(6, 12));
+    osgridref = new OsGridRef(gr[0].substring(0, 6), gr[0].substring(6, 12));
   else {
     $('#WGS84').html("");
     $('#showmap').attr('disabled', true);
     /*console.log("invalid osgridref");*/
     return;
   }
-  /*console.log("gridref", gridref);*/
-  pOSGB = OsGridRef.osGridToLatLong(gridref);
-  pWGS = CoordTransform.convertOSGB36toWGS84(pOSGB);
+  /*console.log("osgridref", osgridref);*/
+  var pWGS = CoordTransform.convertOSGB36toWGS84(OsGridRef.osGridToLatLong(osgridref));
   WGS84LatLon = pWGS.lat().toFixed(8) + ',' + pWGS.lon().toFixed(8);
   $('#WGS84').html(WGS84LatLon);
   $('#showmap').attr('disabled', false);
 }
 function insert(n) {
-  var field = $('#osgridref');
-  field.val(field.val() + n);
+  var gridrefin = $('#osgridref');
+  gridrefin.val(gridrefin.val() + n);
   recalc();
 }
 function del() {
-  var field = $('#osgridref');
-  field.val(field.val().substring(0, field.val().length - 1));
+  var gridrefin = $('#osgridref');
+  gridrefin.val(gridrefin.val().substring(0, gridrefin.val().length - 1));
   recalc();
 }
 function showMap() {
