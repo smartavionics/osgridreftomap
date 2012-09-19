@@ -32,12 +32,11 @@ $(document).ready(function() {
   });
 });
 function recalc() {
-  var gr = $('#osgridref').val().split(" ");
+  var gr = $('#osgridref').val().replace(/[^0-9]/g, '')
+  /*console.log("got ", gr);*/
   var osgridref;
-  if(gr.length == 2 && gr[0].length == 6 && gr[1].length == 6)
-    osgridref = new OsGridRef(gr[0], gr[1]);
-  else if(gr.length == 1 && gr[0].length == 12)
-    osgridref = new OsGridRef(gr[0].substring(0, 6), gr[0].substring(6, 12));
+  if(gr.length == 12)
+    osgridref = new OsGridRef(gr.substring(0, 6), gr.substring(6, 12));
   else {
     $('#WGS84').html("");
     $('#showmap').attr('disabled', true);
