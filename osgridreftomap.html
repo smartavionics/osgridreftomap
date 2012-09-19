@@ -21,9 +21,13 @@ $(document).ready(function() {
   });
   gridrefin.focus();
   gridrefin.keypress(function(ev) {
-    if(ev.which == 13) {
+    if(ev.which == 13) { /* enter */
       ev.preventDefault();
       $('#showmap').focus();
+    }
+    else if(ev.which != 32 && (ev.which < 48 || ev.which > 57)) { /* not space or digit */
+      /*console.log("ignoring ", ev.which);*/
+      ev.preventDefault();
     }
   });
 });
