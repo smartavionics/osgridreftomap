@@ -49,16 +49,6 @@ function recalc() {
   $('#WGS84').html(WGS84LatLon);
   $('#showmap').attr('disabled', false);
 }
-function insert(n) {
-  var gridrefin = $('#osgridref');
-  gridrefin.val(gridrefin.val() + n);
-  recalc();
-}
-function del() {
-  var gridrefin = $('#osgridref');
-  gridrefin.val(gridrefin.val().substring(0, gridrefin.val().length - 1));
-  recalc();
-}
 function showMap() {
   window.open('http://maps.google.co.uk/?q=loc:' + WGS84LatLon + '&ll=' + WGS84LatLon + '&t=m');
 }
@@ -74,34 +64,6 @@ function navigateTo() {
 <tr>
 <td colspan="2">Input 12 digit grid ref (E then N)</td>
 </tr>
-<!--
-<tr>
-<td>&nbsp;</td>
- <td><table>
-   <tr>
-   <td><input type="button" class="keybutton" value="1" onclick="insert(1)"/></td>
-   <td><input type="button" class="keybutton" value="2" onclick="insert(2)"/></td>
-   <td><input type="button" class="keybutton" value="3" onclick="insert(3)"/></td>
-   </tr>
-   <tr>
-   <td><input type="button" class="keybutton" value="4" onclick="insert(4)"/></td>
-   <td><input type="button" class="keybutton" value="5" onclick="insert(5)"/></td>
-   <td><input type="button" class="keybutton" value="6" onclick="insert(6)"/></td>
-   </tr>
-   <tr>
-   <td><input type="button" class="keybutton" value="7" onclick="insert(7)"/></td>
-   <td><input type="button" class="keybutton" value="8" onclick="insert(8)"/></td>
-   <td><input type="button" class="keybutton" value="9" onclick="insert(9)"/></td>
-   </tr>
-   <tr>
-   <td><input type="button" class="keybutton" value="0" onclick="insert(0)"/></td>
-   <td><input type="button" class="keybutton" value="SP" onclick="insert(' ')"/></td>
-   <td><input type="button" class="keybutton" value="DEL" onclick="del()"/></td>
-   </tr>
- </table>
- </td>
-</tr>
--->
 <tr>
 <td colspan="2"><input name="osgridref" id="osgridref" onkeyup="recalc()" type="tel"></td>
 </tr>
