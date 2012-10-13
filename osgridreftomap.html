@@ -34,15 +34,13 @@ $(document).ready(function() {
 function recalc() {
   var gr = $('#osgridref').val().replace(/[^0-9]/g, '')
   /*console.log("got ", gr);*/
-  var osgridref;
-  if(gr.length == 12)
-    osgridref = new OsGridRef(gr.substring(0, 6), gr.substring(6, 12));
-  else {
+  if(gr.length != 12) {
     $('#WGS84').html("");
     $('#showmap').attr('disabled', true);
     /*console.log("invalid osgridref");*/
     return;
   }
+  var osgridref = new OsGridRef(gr.substring(0, 6), gr.substring(6, 12));
   /*console.log("osgridref", osgridref);*/
   var pWGS = CoordTransform.convertOSGB36toWGS84(OsGridRef.osGridToLatLong(osgridref));
   WGS84LatLon = pWGS.lat().toFixed(8) + ',' + pWGS.lon().toFixed(8);
