@@ -37,25 +37,38 @@ function recalc() {
   if(gr.length != 12) {
     $('#WGS84').html("");
     $('#showmap').attr('disabled', true);
+    $('#dosygic').attr('disabled', true);
     /*console.log("invalid osgridref");*/
     return;
   }
   var osgridref = new OsGridRef(gr.substring(0, 6), gr.substring(6, 12));
   /*console.log("osgridref", osgridref);*/
   var pWGS = CoordTransform.convertOSGB36toWGS84(OsGridRef.osGridToLatLong(osgridref));
-  WGS84LatLon = pWGS.lat().toFixed(8) + ',' + pWGS.lon().toFixed(8);
+  WGS84Lat = pWGS.lat().toFixed(8);
+  WGS84Lon = pWGS.lon().toFixed(8);
+  WGS84LatLon = WGS84Lat + ',' + WGS84Lon;
   $('#WGS84').html(WGS84LatLon);
   $('#showmap').attr('disabled', false);
+  if(navigator.userAgent.match(/(Android|iPad|iPhone|iPod)/i))
+    $('#dosygic').attr('disabled', false);
 }
 function showMap() {
   window.open('http://maps.google.co.uk/?q=loc:' + WGS84LatLon + '&ll=' + WGS84LatLon + '&t=m');
 }
-function navigateTo() {
+function doGeo() {
   document.location='geo:' + WGS84LatLon;
+}
+function doSygic() {
+  document.location='com.sygic.aura://coordinate|' + WGS84Lon + '|' + WGS84Lat + '|drive';
 }
 </script>
 </head>
 <body>
+<!--
+<script>
+  document.write(navigator.userAgent);
+</script>
+-->
 <form>
 <fieldset><legend>OS Grid Ref to WGS84 Lat/Lon</legend>
 <table>
@@ -78,12 +91,12 @@ function navigateTo() {
 <td>&nbsp;</td>
 </tr>
 <tr>
-<td>&nbsp;</td>
-<td><input type="button" id="showmap" value="Show Map" onclick="showMap()" disabled="true"/></td>
+<td align="left"><input type="button" id="showmap" value="Show Map" onclick="showMap()" disabled="true"/></td>
+<td align="right"><input type="button" id="dosygic" value="Start Sygic" onclick="doSygic()" disabled="true"/></td>
 </tr>
 <!--
 <tr>
-<td colspan="2"><input type="button" id="navigateto" value="Navigate To" onclick="navigateTo()"/></td>
+<td colspan="2"><input type="button" id="navigateto" value="Navigate To" onclick="doGeo()"/></td>
 </tr>
 -->
 </table>
