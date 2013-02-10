@@ -30,6 +30,9 @@ $(document).ready(function() {
       ev.preventDefault();
     }
   });
+  if(!navigator.userAgent.match(/(Android|iPad|iPhone|iPod)/i)) {
+    $('#dosygic').css("visibility", "hidden");
+  }
 });
 function recalc() {
   var gr = $('#osgridref').val().replace(/[^0-9]/g, '')
